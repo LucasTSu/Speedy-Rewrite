@@ -24,4 +24,5 @@ object SpeedyLauncher {
         speedy = Speedy(config)
         speedy.load()
     }
+
 }

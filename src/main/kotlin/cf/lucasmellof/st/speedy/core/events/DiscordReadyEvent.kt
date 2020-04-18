@@ -8,13 +8,13 @@ import net.dv8tion.jda.api.events.ReadyEvent
 /* 
  * @author Lucasmellof, Lucas de Mello Freitas created on 18/04/2020
  */
-class ReadyEvent {
+object DiscordReadyEvent {
     fun onReady(e: ReadyEvent) {
         println(
             """
             ||-=========================================================
             || Account info: ${e.jda.selfUser.name}#${e.jda.selfUser.discriminator} (ID: ${e.jda.selfUser.id})
-            || Connected to ${e.jda.guilds.size} guilds, ${e.jda.textChannels.size + e.jda.voiceChannels.size} channels
+            || Connected to ${e.jda.guilds.size} guilds, ${e.jda.textChannels.size + e.jda.voiceChannels.size} channels and ${e.jda.users.size} users
             || Default prefix: ${config.prefix}
             || Registered Commands: ${Registry.commands.size}
             || Status: ${e.jda.presence.status}
