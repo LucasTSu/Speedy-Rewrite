@@ -16,7 +16,8 @@ abstract class Command(
     val subCommands: List<String> = listOf(),
     val allowPrivate: Boolean = true,
     val isDeveloperOnly: Boolean = false,
-    val isHidden: Boolean = false
+    val isHidden: Boolean = false,
+    val isStaffOnly: Boolean = false
 ) {
     abstract suspend fun execute(args: List<String>, e: CommandEvent)
     fun <E> List<E>.random(random: java.util.Random): E = get(random.nextInt(size))
