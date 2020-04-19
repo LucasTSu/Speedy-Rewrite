@@ -18,7 +18,7 @@ import java.util.*
 class Speedy(var config: Config) {
     companion object {
         lateinit var jda: JDA
-        val logger = KotlinLogging.logger {Speedy::class}
+        val logger = KotlinLogging.logger { Speedy::class }
     }
 
     fun load() {
@@ -26,15 +26,17 @@ class Speedy(var config: Config) {
         logger.info { "Initializing JDA" }
         Registry().registerCommandsByReflections()
         jda = JDABuilder.createDefault(
-                config.token,
-                GatewayIntent.GUILD_MEMBERS,
-                GatewayIntent.GUILD_VOICE_STATES,
-                GatewayIntent.GUILD_EMOJIS,
-                GatewayIntent.GUILD_PRESENCES
-            )
-            .setMemberCachePolicy(MemberCachePolicy.ALL)
-            .setAutoReconnect(true)
-            .addEventListeners(EventManager())
-            .build()
+                        config.token,
+                        GatewayIntent.GUILD_MEMBERS,
+                        GatewayIntent.GUILD_MESSAGES,
+                        GatewayIntent.GUILD_MESSAGE_TYPING,
+                        GatewayIntent.GUILD_MESSAGE_REACTIONS,
+                        GatewayIntent.GUILD_VOICE_STATES,
+                        GatewayIntent.GUILD_EMOJIS
+                )
+                .setMemberCachePolicy(MemberCachePolicy.ALL)
+                .setAutoReconnect(true)
+                .addEventListeners(EventManager())
+                .build()
     }
 }

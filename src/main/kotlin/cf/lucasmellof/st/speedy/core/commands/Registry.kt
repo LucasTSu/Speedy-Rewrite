@@ -10,7 +10,7 @@ class Registry {
     companion object {
         val commands = mutableListOf<Command>()
         var aliases = HashMap<String, Command>()
-        fun getCommandByName(name: String): Command? = commands.find { name in it.aliases || name == it.name }
+        fun getCommandByName(name: String): Command = commands.find { name in it.aliases || name == it.name }!!
     }
 
     fun registerCommandsByReflections() {

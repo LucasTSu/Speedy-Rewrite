@@ -10,4 +10,7 @@ class Config {
     val prefix = "s!"
     val developer = "213680997546459136"
     val token = "<change-me>"
+    val sugestionChannel = "<change-me>"
+    val staffRoleID = "<change-me>"
+    val voteChannel = "<change-me>"
 }

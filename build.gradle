@@ -23,6 +23,7 @@ dependencies {
     implementation("com.google.code.gson:gson:2.8.6")
     implementation("org.slf4j:slf4j-simple:1.7.26")
     implementation("io.github.microutils:kotlin-logging:1.7.9")
+    implementation("com.github.kevinsawicki:http-request:6.0")
 
     implementation("net.dv8tion:JDA:4.1.1_136") {
         exclude module: 'opus-java'

@@ -12,7 +12,7 @@ import kotlin.system.exitProcess
 object SpeedyLauncher {
     lateinit var config: Config
     lateinit var speedy: Speedy
-
+    var underDevelopment = true
     @JvmStatic
     fun main(args: Array<String>) {
         config = loadConfig(Config::class)!!

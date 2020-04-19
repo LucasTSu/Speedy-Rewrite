@@ -1,6 +1,7 @@
 package cf.lucasmellof.st.speedy.core.events
 
 import cf.lucasmellof.st.speedy.Speedy
+import cf.lucasmellof.st.speedy.SpeedyLauncher
 import cf.lucasmellof.st.speedy.SpeedyLauncher.config
 import cf.lucasmellof.st.speedy.core.commands.CommandEvent
 import cf.lucasmellof.st.speedy.core.commands.Registry
@@ -16,6 +17,8 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent
 object GuildMessageEvent {
     fun onGuildMessageReceived(event: GuildMessageReceivedEvent) {
         if (ready.not()) return
+        if (SpeedyLauncher.underDevelopment || event.author.idLong == 213680997546459136L)
+            return
         val content = event.message.contentRaw
         val selfId = event.jda.selfUser.id
 
@@ -45,8 +48,12 @@ object GuildMessageEvent {
                 event.channel.sendMessage("Esse comando só pode ser usado por " + event.jda.getUserById(config.developer)!!.name)
                 return
             }
+            if((command.isStaffOnly && !event.member!!.roles.contains(event.jda.getRoleById(config.staffRoleID)))|| event.author.id != config.developer){
+                event.channel.sendMessage("Esse comando só pode ser usado pela equipe!")
+                return
+            }
             GlobalScope.async {
-                command.execute(args, CommandEvent(event))
+                command.execute(args, CommandEvent(event, prefix, command))
             }
         }
     }
