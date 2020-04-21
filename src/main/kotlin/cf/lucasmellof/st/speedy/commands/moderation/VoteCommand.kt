@@ -17,12 +17,12 @@ class VoteCommand : Command("votação", Category.MODERATION, description = "Cri
             return
         }
         e.getMessage().delete().queue()
-        val embed = emptyEmbedBuilder(e.getJDA(),e.getAuthor())
-            .setTitle("Sugestão")
+        val embed = emptyEmbedBuilder(e.getJDA(), e.getAuthor())
+            .setTitle("Votação")
             .setThumbnail(getGithubAsset("vote"))
-            .setDescription("Sugerido por ${e.getAuthor().name}")
+            .setDescription("Votação iniciada por ${e.getAuthor().name}")
             .addField(args.joinToString(" "),"",true)
-        e.getJDA().getTextChannelById(SpeedyLauncher.config.sugestionChannel)!!.sendMessage(embed.build()).queue(){
+        e.getJDA().getTextChannelById(SpeedyLauncher.config.voteChannel)!!.sendMessage(embed.build()).queue {
             it.addReaction("asim:701247371518148608").queue()
             it.addReaction("ano:701247371891310622").queue()
         }

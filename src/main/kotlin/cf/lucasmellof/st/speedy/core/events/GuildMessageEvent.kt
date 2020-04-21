@@ -1,10 +1,9 @@
 package cf.lucasmellof.st.speedy.core.events
 
-import cf.lucasmellof.st.speedy.Speedy
-import cf.lucasmellof.st.speedy.SpeedyLauncher
 import cf.lucasmellof.st.speedy.SpeedyLauncher.config
 import cf.lucasmellof.st.speedy.core.commands.CommandEvent
 import cf.lucasmellof.st.speedy.core.commands.Registry
+import cf.lucasmellof.st.speedy.utils.CrashReader
 import cf.lucasmellof.st.speedy.utils.basicEmbedBuilder
 import cf.lucasmellof.st.speedy.utils.ready
 import kotlinx.coroutines.GlobalScope
@@ -17,11 +16,13 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent
 object GuildMessageEvent {
     fun onGuildMessageReceived(event: GuildMessageReceivedEvent) {
         if (ready.not()) return
-        if (SpeedyLauncher.underDevelopment || event.author.idLong == 213680997546459136L)
+        if (event.author.idLong != 213680997546459136L)
             return
         val content = event.message.contentRaw
         val selfId = event.jda.selfUser.id
-
+        if (CrashReader(event).checkIfIsCrash()) {
+            return
+        }
         if (event.isWebhookMessage || event.author.isFake || event.author.isBot || event.author.id == selfId) return
         var prefix = config.prefix
         if (prefix == "%mention%") prefix = event.jda.selfUser.asMention
@@ -53,7 +54,7 @@ object GuildMessageEvent {
                 return
             }
             GlobalScope.async {
-                command.execute(args, CommandEvent(event, prefix, command))
+                command.execute(args, CommandEvent(event, prefix, command.name))
             }
         }
     }

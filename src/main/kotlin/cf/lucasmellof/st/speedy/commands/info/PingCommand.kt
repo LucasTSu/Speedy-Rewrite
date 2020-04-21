@@ -16,10 +16,10 @@ class PingCommand : Command("ping", Category.INFO, "Retorna um ping estimado par
         val time = currentTimeMilis()
         e.sendTypying().queue {
             val embed = emptyEmbedBuilder(e.getJDA(), e.getAuthor())
-                    .setTitle("Pong!")
-                    .setThumbnail(getGithubAsset("ping_pong"))
-                    .addField("Latência", "__**${currentTimeMillis() - time}ms**__", false)
-                    .addField("API", "__**${e.getJDA().gatewayPing}ms**__", false)
+                .setTitle("Pong!")
+                .setThumbnail(getGithubAsset("ping_pong"))
+                .addField(":zap: API", "__**${currentTimeMillis() - time}ms**__", false)
+                .addField(":stopwatch: Gateway", "__**${e.getJDA().gatewayPing}ms**__", false)
             e.reply(embed.build())
         }
     }

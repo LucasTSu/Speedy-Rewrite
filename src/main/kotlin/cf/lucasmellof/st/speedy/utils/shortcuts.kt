@@ -1,22 +1,32 @@
 package cf.lucasmellof.st.speedy.utils
 
+import cf.lucasmellof.st.speedy.Speedy.Companion.logger
 import cf.lucasmellof.st.speedy.core.commands.CommandEvent
 import net.dv8tion.jda.api.EmbedBuilder
 import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.entities.Member
 import net.dv8tion.jda.api.entities.MessageChannel
 import net.dv8tion.jda.api.entities.User
+import org.apache.http.client.methods.CloseableHttpResponse
+import org.apache.http.client.methods.HttpPost
+import org.apache.http.entity.StringEntity
+import org.apache.http.impl.client.CloseableHttpClient
+import org.apache.http.impl.client.HttpClientBuilder
+import org.apache.http.util.EntityUtils
+import org.json.JSONObject
 import java.awt.Color
+import java.io.IOException
 import java.lang.management.ManagementFactory
 import java.text.DecimalFormat
-import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import java.util.*
+
 
 /*
  * @author Lucasmellof, Lucas de Mello Freitas created on 17/04/2020
  */
 fun printCoolLogo() = println(
-        """
+    """
     _____                     __     
   / ___/____  ___  ___  ____/ /_  __
   \__ \/ __ \/ _ \/ _ \/ __  / / / /
@@ -26,11 +36,13 @@ fun printCoolLogo() = println(
 """.trimIndent()
 )
 
+val random = Random()
+var ready = false
 fun stripFormatting(text: String): String = text.replace("@", "\\@")
-        .replace("~~", "\\~\\~")
-        .replace("*", "\\*")
-        .replace("`", "\\`")
-        .replace("_", "\\_")
+    .replace("~~", "\\~\\~")
+    .replace("*", "\\*")
+    .replace("`", "\\`")
+    .replace("_", "\\_")
 
 fun parseTime(milliseconds: Long): String {
     val seconds = milliseconds / 1000 % 60
@@ -60,7 +72,6 @@ fun basicEmbedBuilder(jda: JDA, name: String, value: String, inline: Boolean, us
     return channel.sendMessage(basicEmbedBuilder(jda, name, value, inline, user).build()).queue()
 }
 
-var ready = false
 fun currentTimeMilis() = System.currentTimeMillis()
 fun getGithubAsset(image: String) = "https://github.com/LucasTSu/Speedy-Rewrite/blob/master/assets/$image.png?raw=true"
 fun getGithubAsset(image: String, extension: String) = "https://github.com/LucasTSu/Speedy-Rewrite/blob/master/assets/$image.$extension?raw=true"
@@ -104,11 +115,7 @@ fun convertToStringRepresentation(value: Long): String? {
     return result
 }
 
-private fun format(
-        value: Long,
-        divider: Long,
-        unit: String
-): String {
+private fun format(value: Long, divider: Long, unit: String): String {
     val result = if (divider > 1) value.toDouble() / divider.toDouble() else value.toDouble()
     return DecimalFormat("#,##0.#").format(result) + " " + unit
 }
@@ -143,3 +150,17 @@ fun convertUsernameDiscrim(str: String): Pair<String?, String?> {
 }
 
 fun getDateFormatter() = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss.SSS")
+
+fun sendToHastebin(data: String?): String? {
+    val client: CloseableHttpClient? = HttpClientBuilder.create().build()
+    val post = HttpPost("https://hasteb.in/documents")
+    try {
+        post.entity = StringEntity(data)
+        val response: CloseableHttpResponse? = client?.execute(post)
+        val result = EntityUtils.toString(response?.entity)
+        return "https://hasteb.in/" + JSONObject(result).getString("key")
+    } catch (e: IOException) {
+        logger.warn(data)
+    }
+    return data
+}
